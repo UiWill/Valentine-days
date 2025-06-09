@@ -1,0 +1,412 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg, #74b9ff 0%, #0984e3 50%, #6c5ce7 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.container {
+    position: relative;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* Background Hearts Animation */
+.hearts-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.heart {
+    position: absolute;
+    font-size: 2em;
+    opacity: 0.3;
+    animation: floating 6s ease-in-out infinite;
+}
+
+.heart-1 { top: 10%; left: 10%; animation-delay: 0s; }
+.heart-2 { top: 20%; right: 15%; animation-delay: 1s; }
+.heart-3 { top: 50%; left: 5%; animation-delay: 2s; }
+.heart-4 { top: 70%; right: 10%; animation-delay: 3s; }
+.heart-5 { top: 80%; left: 15%; animation-delay: 4s; }
+
+@keyframes floating {
+    0%, 100% { transform: translateY(0px) rotate(0deg); }
+    50% { transform: translateY(-20px) rotate(5deg); }
+}
+
+/* Main Content */
+.main-content {
+    position: relative;
+    z-index: 1;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px 0;
+}
+
+/* Romantic Header */
+.message-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.romantic-title {
+    font-family: 'Dancing Script', cursive;
+    font-size: 2.5em;
+    font-weight: 700;
+    color: #2d3436;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 10px;
+}
+
+.romantic-subtitle {
+    color: #555;
+    font-size: 1em;
+    font-weight: 300;
+}
+
+/* Polaroid Photo Style */
+.polaroid-container {
+    display: flex;
+    justify-content: center;
+    margin: 40px 0;
+}
+
+.polaroid {
+    background: white;
+    padding: 25px 25px 70px 25px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+    transform: rotate(-2deg);
+    transition: transform 0.3s ease;
+    max-width: 350px;
+}
+
+.polaroid:hover {
+    transform: rotate(0deg) scale(1.05);
+}
+
+.romantic-photo {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    border-radius: 3px;
+}
+
+.polaroid-caption {
+    text-align: center;
+    margin-top: 15px;
+    font-family: 'Dancing Script', cursive;
+}
+
+.polaroid-caption p {
+    margin: 5px 0;
+    color: #555;
+}
+
+.polaroid-caption .date {
+    font-size: 0.9em;
+    color: #888;
+}
+
+/* Music Player Styles */
+.music-player {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    padding: 25px;
+    margin: 30px 0;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    backdrop-filter: blur(10px);
+}
+
+.player-header h3 {
+    text-align: center;
+    color: #2d3436;
+    margin-bottom: 20px;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.4em;
+}
+
+.song-info {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.album-art {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    overflow: hidden;
+    margin-right: 15px;
+}
+
+.album-art img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.song-details h4 {
+    color: #333;
+    font-size: 1.1em;
+    margin-bottom: 5px;
+}
+
+.song-details p {
+    color: #666;
+    font-size: 0.9em;
+}
+
+/* Player Controls */
+.player-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.control-btn {
+    background: linear-gradient(135deg, #74b9ff, #0984e3);
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2em;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(116, 185, 255, 0.3);
+}
+
+.control-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(116, 185, 255, 0.4);
+}
+
+.control-btn:active {
+    transform: scale(0.95);
+}
+
+.progress-container {
+    flex: 1;
+}
+
+.progress-bar {
+    height: 6px;
+    background: rgba(116, 185, 255, 0.2);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 8px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #74b9ff, #0984e3);
+    width: 0%;
+    transition: width 0.1s ease;
+}
+
+.time-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8em;
+    color: #666;
+}
+
+/* Sound Waves Animation */
+.sound-waves {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    height: 40px;
+    gap: 3px;
+}
+
+.wave {
+    width: 4px;
+    background: linear-gradient(180deg, #74b9ff, #0984e3);
+    border-radius: 2px;
+    animation: wave-animation 1.5s ease-in-out infinite;
+}
+
+.wave-1 { height: 10px; animation-delay: 0.1s; }
+.wave-2 { height: 20px; animation-delay: 0.2s; }
+.wave-3 { height: 35px; animation-delay: 0.3s; }
+.wave-4 { height: 25px; animation-delay: 0.4s; }
+.wave-5 { height: 30px; animation-delay: 0.5s; }
+.wave-6 { height: 15px; animation-delay: 0.6s; }
+.wave-7 { height: 25px; animation-delay: 0.7s; }
+.wave-8 { height: 20px; animation-delay: 0.8s; }
+
+@keyframes wave-animation {
+    0%, 100% { transform: scaleY(0.3); opacity: 0.5; }
+    50% { transform: scaleY(1); opacity: 1; }
+}
+
+.sound-waves.playing .wave {
+    animation-play-state: running;
+}
+
+.sound-waves.paused .wave {
+    animation-play-state: paused;
+}
+
+/* Love Message */
+.love-message {
+    margin: 30px 0;
+}
+
+.message-card {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+    border-left: 5px solid #74b9ff;
+}
+
+.message-card h3 {
+    color: #2d3436;
+    margin-bottom: 15px;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.3em;
+}
+
+.message-card p {
+    color: #555;
+    line-height: 1.6;
+    margin-bottom: 15px;
+}
+
+.signature {
+    text-align: right;
+    font-style: italic;
+    color: #666;
+}
+
+.heart-signature {
+    color: #74b9ff;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.1em;
+}
+
+/* Interactive Section */
+.interactive-section {
+    text-align: center;
+    margin: 30px 0;
+}
+
+.surprise-btn {
+    background: linear-gradient(135deg, #74b9ff, #a29bfe);
+    border: none;
+    padding: 15px 30px;
+    border-radius: 25px;
+    color: #2d3436;
+    font-size: 1em;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(116, 185, 255, 0.3);
+}
+
+.surprise-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(116, 185, 255, 0.4);
+}
+
+.surprise-hidden {
+    display: none;
+}
+
+.surprise-visible {
+    display: block;
+    animation: slideIn 0.5s ease-out;
+}
+
+.surprise-content {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+}
+
+.surprise-content h3 {
+    color: #2d3436;
+    margin-bottom: 10px;
+    font-family: 'Dancing Script', cursive;
+}
+
+.sparkles {
+    font-size: 1.5em;
+    margin-top: 10px;
+    animation: sparkle 2s ease-in-out infinite;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes sparkle {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.1); }
+}
+
+/* Responsive Design */
+@media (max-width: 480px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .main-content {
+        padding: 10px 0;
+    }
+    
+    .romantic-title {
+        font-size: 2em;
+    }
+    
+    .polaroid {
+        padding: 20px 20px 50px 20px;
+        max-width: 320px;
+    }
+    
+    .romantic-photo {
+        height: 240px;
+    }
+    
+    .music-player {
+        padding: 20px;
+        margin: 20px 0;
+    }
+}
+
+/* Loading Animation */
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.loading {
+    animation: pulse 1.5s ease-in-out infinite;
+} 

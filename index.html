@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para Minha Namorada ❤️</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Background Hearts Animation -->
+        <div class="hearts-background">
+            <div class="heart heart-1">💙</div>
+            <div class="heart heart-2">🤍</div>
+            <div class="heart heart-3">💙</div>
+            <div class="heart heart-4">🤍</div>
+            <div class="heart heart-5">💙</div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Romantic Message -->
+                            <div class="message-header">
+                    <h1 class="romantic-title">Para Você, Meu Amor</h1>
+                    <p class="romantic-subtitle">Uma surpresa especial feita com todo carinho 💙🌊</p>
+                </div>
+
+            <!-- Polaroid Photo -->
+            <div class="polaroid-container">
+                <div class="polaroid">
+                    <img src="foto.jfif" alt="Nossa foto especial" class="romantic-photo">
+                    <div class="polaroid-caption">
+                        <p>Nós dois 💙</p>
+                        <p class="date">Dia dos Namorados 2025</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Music Player -->
+            <div class="music-player">
+                <div class="player-header">
+                    <h3>🎵 Nossa Música Especial</h3>
+                </div>
+                
+                <div class="player-content">
+                    <div class="song-info">
+                        <div class="album-art">
+                            <img src="capa da musica.png" alt="I Like Me Better">
+                        </div>
+                        <div class="song-details">
+                            <h4>I Like Me Better</h4>
+                            <p>Lauv</p>
+                        </div>
+                    </div>
+
+                    <!-- Audio Element -->
+                    <audio id="audioPlayer" preload="auto" loop>
+                        <source src="https://cdn.pixabay.com/audio/2022/05/13/audio_c34c6f4b51.mp3" type="audio/mpeg">
+                        Seu navegador não suporta áudio HTML5.
+                    </audio>
+
+                    <!-- Custom Controls -->
+                    <div class="player-controls">
+                        <button id="playPauseBtn" class="control-btn play-btn">
+                            <span class="play-icon">▶️</span>
+                            <span class="pause-icon" style="display: none;">⏸️</span>
+                        </button>
+                        
+                        <div class="progress-container">
+                            <div class="progress-bar">
+                                <div class="progress-fill"></div>
+                            </div>
+                            <div class="time-info">
+                                <span id="currentTime">0:00</span>
+                                <span id="duration">3:38</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sound Waves Animation -->
+                    <div class="sound-waves">
+                        <div class="wave wave-1"></div>
+                        <div class="wave wave-2"></div>
+                        <div class="wave wave-3"></div>
+                        <div class="wave wave-4"></div>
+                        <div class="wave wave-5"></div>
+                        <div class="wave wave-6"></div>
+                        <div class="wave wave-7"></div>
+                        <div class="wave wave-8"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Romantic Message -->
+            <div class="love-message">
+                <div class="message-card">
+                    <h3>🌊 Mensagem do Coração</h3>
+                    <p>Esta música sempre me faz lembrar de você e de como nossa vida ficou mais bonita desde que estamos juntos. Você é minha pessoa favorita e meu lugar seguro. 💙</p>
+                    <p class="signature">Com todo meu amor,<br><span class="heart-signature">Seu namorado que te ama muito 💙🌊</span></p>
+                </div>
+            </div>
+
+            <!-- Interactive Elements -->
+            <div class="interactive-section">
+                <button class="surprise-btn" onclick="showSurprise()">
+                    ✨ Clique para uma surpresa
+                </button>
+                
+                <div id="surprise-message" class="surprise-hidden">
+                    <div class="surprise-content">
+                        <h3>🦈 Você é incrível!</h3>
+                        <p>Assim como os tubarões navegam pelo oceano, você navega pelo meu coração! Obrigado por ser você! 💙🌊</p>
+                        <div class="sparkles">🦈🌊💙</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 

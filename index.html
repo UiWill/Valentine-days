@@ -55,18 +55,21 @@
                         </div>
                     </div>
 
-                    <!-- YouTube Audio Integration -->
-                    <div class="youtube-player" id="youtube-container">
+                    <!-- Audio Player Principal -->
+                    <audio id="audioPlayer" preload="auto" loop crossorigin="anonymous">
+                        <source src="https://commondatastorage.googleapis.com/codeskulptor-assets/Epoq-Lepidoptera.ogg" type="audio/ogg">
+                        <source src="https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3" type="audio/mpeg">
+                        <source src="https://file-examples.com/storage/fef31ba68d46d998bb2a7c4/2017/11/file_example_MP3_5MG.mp3" type="audio/mpeg">
+                        Seu navegador não suporta áudio HTML5.
+                    </audio>
+                    
+                    <!-- YouTube Backup (sem autoplay) -->
+                    <div class="youtube-player" id="youtube-container" style="display: none;">
                         <iframe id="youtube-player" width="0" height="0" 
                                 src="https://www.youtube.com/embed/a7fzkqLozwA?enablejsapi=1&controls=0&autoplay=0&loop=1&playlist=a7fzkqLozwA" 
-                                frameborder="0" allow="autoplay; encrypted-media" style="display: none;">
+                                frameborder="0" allow="autoplay; encrypted-media">
                         </iframe>
                     </div>
-                    
-                    <!-- Fallback Audio Element -->
-                    <audio id="audioPlayer" preload="auto" loop style="display: none;">
-                        <source src="" type="audio/mpeg">
-                    </audio>
 
                     <!-- Custom Controls -->
                     <div class="player-controls">

@@ -15,6 +15,8 @@ let youtubePlayerReady = false;
 // Estado do player
 let isPlaying = false;
 let isDragging = false;
+let autoplayAttempted = false;
+let audioReady = false;
 
 // Inicialização
 document.addEventListener('DOMContentLoaded', function() {
@@ -112,31 +114,101 @@ function setupMusicPlayer() {
     playPauseBtn.addEventListener('click', togglePlayPause);
     
     // Eventos do audio
-    audioPlayer.addEventListener('loadedmetadata', updateDuration);
+    audioPlayer.addEventListener('loadedmetadata', () => {
+        audioReady = true;
+        updateDuration();
+        // Tentar autoplay após carregar
+        setTimeout(attemptAutoplay, 1000);
+    });
+    
     audioPlayer.addEventListener('timeupdate', updateProgress);
+    
     audioPlayer.addEventListener('ended', () => {
-        isPlaying = false;
-        updatePlayPauseButton();
-        updateSoundWaves();
+        // Loop automático
+        audioPlayer.currentTime = 0;
+        audioPlayer.play();
+    });
+    
+    audioPlayer.addEventListener('canplaythrough', () => {
+        audioReady = true;
+        console.log('Áudio pronto para reproduzir');
+        if (!autoplayAttempted) {
+            setTimeout(attemptAutoplay, 500);
+        }
     });
     
     // Eventos de erro
-    audioPlayer.addEventListener('error', () => {
-        console.log('Erro no áudio, usando simulação');
-        // Se não conseguir carregar áudio real, usar simulação
+    audioPlayer.addEventListener('error', (e) => {
+        console.log('Erro no áudio:', e);
         setupSimulatedPlayer();
     });
     
     // Clique na barra de progresso
     document.querySelector('.progress-bar').addEventListener('click', seekAudio);
     
-    // Configurar simulação como fallback
-    setupSimulatedPlayer();
+    // Eventos para autoplay em interação do usuário
+    document.addEventListener('click', enableAutoplayOnInteraction, { once: true });
+    document.addEventListener('touchstart', enableAutoplayOnInteraction, { once: true });
+    
+    // Configurar volume
+    audioPlayer.volume = 0.7;
 }
 
 // Variáveis para simulação
 let simulationInterval = null;
-let useSimulation = true;
+let useSimulation = false; // Tentar áudio real primeiro
+
+// Tentar autoplay inteligente
+function attemptAutoplay() {
+    if (autoplayAttempted || !audioReady) return;
+    
+    autoplayAttempted = true;
+    console.log('Tentando autoplay...');
+    
+    audioPlayer.play().then(() => {
+        console.log('Autoplay funcionou!');
+        isPlaying = true;
+        updatePlayPauseButton();
+        updateSoundWaves();
+        showAutoplayMessage();
+    }).catch(error => {
+        console.log('Autoplay bloqueado:', error);
+        showClickToPlayMessage();
+    });
+}
+
+// Habilitar autoplay após interação do usuário
+function enableAutoplayOnInteraction() {
+    if (!isPlaying && audioReady) {
+        console.log('Primeira interação detectada, iniciando música...');
+        audioPlayer.play().then(() => {
+            isPlaying = true;
+            updatePlayPauseButton();
+            updateSoundWaves();
+            hideClickToPlayMessage();
+        }).catch(console.error);
+    }
+}
+
+// Mostrar mensagem de autoplay
+function showAutoplayMessage() {
+    const note = document.querySelector('.player-note');
+    note.textContent = '🎵 Música tocando automaticamente! 💙';
+}
+
+// Mostrar mensagem para clicar
+function showClickToPlayMessage() {
+    const note = document.querySelector('.player-note');
+    note.textContent = '🎧 Clique em qualquer lugar para iniciar a música 💙';
+    note.style.animation = 'pulse 2s infinite';
+}
+
+// Esconder mensagem de clique
+function hideClickToPlayMessage() {
+    const note = document.querySelector('.player-note');
+    note.textContent = '🎵 Nossa Música Especial 💙';
+    note.style.animation = 'none';
+}
 
 // Configurar player simulado
 function setupSimulatedPlayer() {
@@ -144,19 +216,30 @@ function setupSimulatedPlayer() {
     // Definir duração fixa para "I Like Me Better"
     durationEl.textContent = "3:38";
     currentTimeEl.textContent = "0:00";
+    showClickToPlayMessage();
 }
 
 // Alternar entre play e pause
 function togglePlayPause() {
-    if (youtubePlayerReady && youtubePlayer) {
-        // Usar YouTube Player
+    if (audioReady && !useSimulation) {
+        // Usar Audio HTML5
         if (isPlaying) {
-            youtubePlayer.pauseVideo();
+            audioPlayer.pause();
+            isPlaying = false;
         } else {
-            youtubePlayer.playVideo();
+            audioPlayer.play().then(() => {
+                isPlaying = true;
+                hideClickToPlayMessage();
+            }).catch(error => {
+                console.log('Erro ao reproduzir:', error);
+                // Fallback para simulação
+                useSimulation = true;
+                startSimulatedPlayback();
+                isPlaying = true;
+            });
         }
     } else {
-        // Fallback para simulação
+        // Usar simulação
         if (isPlaying) {
             if (simulationInterval) {
                 clearInterval(simulationInterval);
@@ -167,10 +250,10 @@ function togglePlayPause() {
             startSimulatedPlayback();
             isPlaying = true;
         }
-        
-        updatePlayPauseButton();
-        updateSoundWaves();
     }
+    
+    updatePlayPauseButton();
+    updateSoundWaves();
 }
 
 // Simular reprodução de áudio com progresso realista
@@ -259,11 +342,10 @@ function seekAudio(e) {
     const rect = progressBar.getBoundingClientRect();
     const percent = (e.clientX - rect.left) / rect.width;
     
-    if (youtubePlayerReady && youtubePlayer) {
-        // YouTube Player
-        const duration = youtubePlayer.getDuration();
-        const newTime = percent * duration;
-        youtubePlayer.seekTo(newTime, true);
+    if (audioReady && !useSimulation && audioPlayer.duration) {
+        // Audio HTML5
+        const newTime = percent * audioPlayer.duration;
+        audioPlayer.currentTime = newTime;
     } else {
         // Simulação
         const duration = 218; // 3:38 em segundos

@@ -68,26 +68,15 @@
                         <p>Carregando do Spotify... 🎵</p>
                     </div>
 
-                    <!-- Custom Controls -->
-                    <div class="player-controls">
-                        <button id="playPauseBtn" class="control-btn play-btn">
-                            <span class="play-icon">▶️</span>
-                            <span class="pause-icon" style="display: none;">⏸️</span>
-                        </button>
-                        
-                        <div class="progress-container">
-                            <div class="progress-bar">
-                                <div class="progress-fill"></div>
-                            </div>
-                            <div class="time-info">
-                                <span id="currentTime">0:00</span>
-                                <span id="duration">3:38</span>
-                            </div>
-                        </div>
+                    <!-- Time Display Only -->
+                    <div class="time-display">
+                        <span id="currentTime">0:00</span>
+                        <span>/</span>
+                        <span id="duration">3:38</span>
                     </div>
 
                     <!-- Sound Waves Animation -->
-                    <div class="sound-waves">
+                    <div class="sound-waves" onclick="activateSpotify()">
                         <div class="wave wave-1"></div>
                         <div class="wave wave-2"></div>
                         <div class="wave wave-3"></div>
@@ -96,6 +85,11 @@
                         <div class="wave wave-6"></div>
                         <div class="wave wave-7"></div>
                         <div class="wave wave-8"></div>
+                    </div>
+                    
+                    <!-- Instrução sutil para ativar música -->
+                    <div id="music-hint" class="music-hint">
+                        🎵 Toque nas ondas sonoras para ativar a música
                     </div>
                 </div>
             </div>
@@ -107,6 +101,12 @@
                     <p>Esta música sempre me faz lembrar de você e de como nossa vida ficou mais bonita desde que estamos juntos. Você é minha pessoa favorita e meu lugar seguro. 💙</p>
                     <p class="signature">Com todo meu amor,<br><span class="heart-signature">Seu namorado que te ama muito 💙🌊</span></p>
                 </div>
+            </div>
+
+            <!-- Spotify Player Widget - Hidden but functional -->
+            <div class="widget6">
+                <span>Estou escutando...</span>
+                <iframe id="spotify-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/4MagTPnkPiDuIa4P8GtW1b?utm_source=generator&autoplay=1&auto_play=true&play=1&theme=0&show_artwork=true" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="eager"></iframe>
             </div>
 
             <!-- Interactive Elements -->

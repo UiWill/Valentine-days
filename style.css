@@ -222,62 +222,18 @@ body {
     font-size: 0.9em;
 }
 
-/* Player Controls */
-.player-controls {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 20px;
-}
-
-.control-btn {
-    background: linear-gradient(135deg, #74b9ff, #0984e3);
-    border: none;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.2em;
-    transition: all 0.3s ease;
-    box-shadow: 0 4px 15px rgba(116, 185, 255, 0.3);
-}
-
-.control-btn:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 20px rgba(116, 185, 255, 0.4);
-}
-
-.control-btn:active {
-    transform: scale(0.95);
-}
-
-.progress-container {
-    flex: 1;
-}
-
-.progress-bar {
-    height: 6px;
-    background: rgba(116, 185, 255, 0.2);
-    border-radius: 3px;
-    overflow: hidden;
-    margin-bottom: 8px;
-}
-
-.progress-fill {
-    height: 100%;
-    background: linear-gradient(90deg, #74b9ff, #0984e3);
-    width: 0%;
-    transition: width 0.1s ease;
-}
-
-.time-info {
-    display: flex;
-    justify-content: space-between;
-    font-size: 0.8em;
+/* Time Display */
+.time-display {
+    text-align: center;
+    margin: 15px 0;
+    font-family: 'Poppins', sans-serif;
     color: #666;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+
+.time-display span {
+    margin: 0 2px;
 }
 
 /* Sound Waves Animation */
@@ -310,12 +266,38 @@ body {
     50% { transform: scaleY(1); opacity: 1; }
 }
 
-.sound-waves.playing .wave {
+/* Sound waves always playing */
+.sound-waves .wave {
     animation-play-state: running;
 }
 
-.sound-waves.paused .wave {
-    animation-play-state: paused;
+.sound-waves {
+    cursor: pointer;
+    transition: transform 0.3s ease;
+}
+
+.sound-waves:hover {
+    transform: scale(1.05);
+}
+
+/* Music hint */
+.music-hint {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 0.8em;
+    color: #74b9ff;
+    opacity: 0.8;
+    animation: pulse-hint 2s ease-in-out infinite;
+}
+
+.music-hint.hidden {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+@keyframes pulse-hint {
+    0%, 100% { opacity: 0.6; }
+    50% { opacity: 1; }
 }
 
 /* Love Message */
@@ -451,6 +433,47 @@ body {
     .music-player {
         padding: 20px;
         margin: 20px 0;
+    }
+}
+
+/* Spotify Widget - Hidden but functional */
+.widget6 {
+    position: absolute;
+    left: -9999px;
+    opacity: 0;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+}
+
+.widget6 span {
+    display: block;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1.2rem;
+    color: white;
+    margin-bottom: 1rem;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.widget6 iframe {
+    border-radius: 12px !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease;
+}
+
+.widget6 iframe:hover {
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .widget6 {
+        margin: 1.5rem 0;
+        padding: 1.5rem;
+    }
+    
+    .widget6 span {
+        font-size: 1rem;
     }
 }
 

@@ -119,186 +119,9 @@ body {
     color: #888;
 }
 
-/* Music Player Styles */
-.music-player {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 20px;
-    padding: 25px;
-    margin: 30px 0;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-    backdrop-filter: blur(10px);
-}
 
-.player-header h3 {
-    text-align: center;
-    color: #2d3436;
-    margin-bottom: 10px;
-    font-family: 'Dancing Script', cursive;
-    font-size: 1.4em;
-}
 
-.player-note {
-    text-align: center;
-    color: #666;
-    font-size: 0.9em;
-    margin-bottom: 15px;
-    font-style: italic;
-    transition: all 0.3s ease;
-}
 
-@keyframes pulse {
-    0% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.7; transform: scale(1.05); }
-    100% { opacity: 1; transform: scale(1); }
-}
-
-/* Loading Spotify */
-.loading-spotify {
-    text-align: center;
-    padding: 20px;
-    color: #74b9ff;
-    display: none;
-}
-
-.loading-spotify.show {
-    display: block;
-}
-
-.loading-dots {
-    display: inline-block;
-    margin-bottom: 10px;
-}
-
-.loading-dots span {
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #74b9ff;
-    margin: 0 2px;
-    animation: loading-bounce 1.4s ease-in-out infinite both;
-}
-
-.loading-dots span:nth-child(1) { animation-delay: -0.32s; }
-.loading-dots span:nth-child(2) { animation-delay: -0.16s; }
-
-@keyframes loading-bounce {
-    0%, 80%, 100% {
-        transform: scale(0);
-    }
-    40% {
-        transform: scale(1);
-    }
-}
-
-.song-info {
-    display: flex;
-    align-items: center;
-    margin-bottom: 20px;
-}
-
-.album-art {
-    width: 60px;
-    height: 60px;
-    border-radius: 10px;
-    overflow: hidden;
-    margin-right: 15px;
-}
-
-.album-art img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.song-details h4 {
-    color: #333;
-    font-size: 1.1em;
-    margin-bottom: 5px;
-}
-
-.song-details p {
-    color: #666;
-    font-size: 0.9em;
-}
-
-/* Time Display */
-.time-display {
-    text-align: center;
-    margin: 15px 0;
-    font-family: 'Poppins', sans-serif;
-    color: #666;
-    font-size: 0.9em;
-    font-weight: 500;
-}
-
-.time-display span {
-    margin: 0 2px;
-}
-
-/* Sound Waves Animation */
-.sound-waves {
-    display: flex;
-    justify-content: center;
-    align-items: flex-end;
-    height: 40px;
-    gap: 3px;
-}
-
-.wave {
-    width: 4px;
-    background: linear-gradient(180deg, #74b9ff, #0984e3);
-    border-radius: 2px;
-    animation: wave-animation 1.5s ease-in-out infinite;
-}
-
-.wave-1 { height: 10px; animation-delay: 0.1s; }
-.wave-2 { height: 20px; animation-delay: 0.2s; }
-.wave-3 { height: 35px; animation-delay: 0.3s; }
-.wave-4 { height: 25px; animation-delay: 0.4s; }
-.wave-5 { height: 30px; animation-delay: 0.5s; }
-.wave-6 { height: 15px; animation-delay: 0.6s; }
-.wave-7 { height: 25px; animation-delay: 0.7s; }
-.wave-8 { height: 20px; animation-delay: 0.8s; }
-
-@keyframes wave-animation {
-    0%, 100% { transform: scaleY(0.3); opacity: 0.5; }
-    50% { transform: scaleY(1); opacity: 1; }
-}
-
-/* Sound waves always playing */
-.sound-waves .wave {
-    animation-play-state: running;
-}
-
-.sound-waves {
-    cursor: pointer;
-    transition: transform 0.3s ease;
-}
-
-.sound-waves:hover {
-    transform: scale(1.05);
-}
-
-/* Music hint */
-.music-hint {
-    text-align: center;
-    margin-top: 10px;
-    font-size: 0.8em;
-    color: #74b9ff;
-    opacity: 0.8;
-    animation: pulse-hint 2s ease-in-out infinite;
-}
-
-.music-hint.hidden {
-    opacity: 0;
-    transition: opacity 0.5s ease;
-}
-
-@keyframes pulse-hint {
-    0%, 100% { opacity: 0.6; }
-    50% { opacity: 1; }
-}
 
 /* Love Message */
 .love-message {
@@ -430,52 +253,29 @@ body {
         height: 240px;
     }
     
-    .music-player {
-        padding: 20px;
+    .spotify-container {
         margin: 20px 0;
     }
 }
 
-/* Spotify Widget - Hidden but functional */
-.widget6 {
-    position: absolute;
-    left: -9999px;
-    opacity: 0;
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
+/* Spotify Player Container */
+.spotify-container {
+    margin: 30px 0;
+    padding: 0;
+    text-align: center;
 }
 
-.widget6 span {
-    display: block;
-    font-family: 'Poppins', sans-serif;
-    font-size: 1.2rem;
-    color: white;
-    margin-bottom: 1rem;
-    font-weight: 600;
-    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+.spotify-container iframe {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.widget6 iframe {
-    border-radius: 12px !important;
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-    transition: transform 0.3s ease;
-}
-
-.widget6 iframe:hover {
+.spotify-container iframe:hover {
     transform: translateY(-2px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
 }
 
-@media (max-width: 768px) {
-    .widget6 {
-        margin: 1.5rem 0;
-        padding: 1.5rem;
-    }
-    
-    .widget6 span {
-        font-size: 1rem;
-    }
-}
+
 
 /* Loading Animation */
 @keyframes pulse {

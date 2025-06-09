@@ -37,61 +37,9 @@
                 </div>
             </div>
 
-            <!-- Music Player -->
-            <div class="music-player">
-                <div class="player-header">
-                    <h3>🎵 Nossa Música Especial</h3>
-                    <p class="player-note">🎧 Powered by Spotify - Preview Oficial da Música</p>
-                </div>
-                
-                <div class="player-content">
-                    <div class="song-info">
-                        <div class="album-art">
-                            <img id="album-art-img" src="capa da musica.png" alt="I Like Me Better">
-                        </div>
-                        <div class="song-details">
-                            <h4>I Like Me Better</h4>
-                            <p>Lauv</p>
-                        </div>
-                    </div>
-
-                    <!-- Spotify Audio Player -->
-                    <audio id="audioPlayer" preload="auto" crossorigin="anonymous">
-                        <!-- A URL será definida dinamicamente via Spotify API -->
-                    </audio>
-                    
-                    <!-- Loading indicator -->
-                    <div id="spotify-loading" class="loading-spotify">
-                        <div class="loading-dots">
-                            <span></span><span></span><span></span>
-                        </div>
-                        <p>Carregando do Spotify... 🎵</p>
-                    </div>
-
-                    <!-- Time Display Only -->
-                    <div class="time-display">
-                        <span id="currentTime">0:00</span>
-                        <span>/</span>
-                        <span id="duration">3:38</span>
-                    </div>
-
-                    <!-- Sound Waves Animation -->
-                    <div class="sound-waves" onclick="activateSpotify()">
-                        <div class="wave wave-1"></div>
-                        <div class="wave wave-2"></div>
-                        <div class="wave wave-3"></div>
-                        <div class="wave wave-4"></div>
-                        <div class="wave wave-5"></div>
-                        <div class="wave wave-6"></div>
-                        <div class="wave wave-7"></div>
-                        <div class="wave wave-8"></div>
-                    </div>
-                    
-                    <!-- Instrução sutil para ativar música -->
-                    <div id="music-hint" class="music-hint">
-                        🎵 Toque nas ondas sonoras para ativar a música
-                    </div>
-                </div>
+            <!-- Spotify Player -->
+            <div class="spotify-container">
+                <iframe style="border-radius:12px" src="https://open.spotify.com/embed/playlist/1Vp5iREcp0ddtbI4fRvsYk?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
             </div>
 
             <!-- Romantic Message -->
@@ -103,11 +51,7 @@
                 </div>
             </div>
 
-            <!-- Spotify Player Widget - Hidden but functional -->
-            <div class="widget6">
-                <span>Estou escutando...</span>
-                <iframe id="spotify-iframe" style="border-radius:12px" src="https://open.spotify.com/embed/track/4MagTPnkPiDuIa4P8GtW1b?utm_source=generator&autoplay=1&auto_play=true&play=1&theme=0&show_artwork=true" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="eager"></iframe>
-            </div>
+
 
             <!-- Interactive Elements -->
             <div class="interactive-section">

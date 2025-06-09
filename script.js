@@ -37,22 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
     // Configurar interações
     setupInteractions();
     
-    // Tentar iniciar Spotify automaticamente
-    attemptSpotifyAutoplay();
-    
-    // Adicionar listener para ativar Spotify em qualquer clique
-    document.addEventListener('click', function() {
-        if (!spotifyActivated) {
-            activateSpotify();
-        }
-    });
-    
-    // Também tentar em touch (mobile)
-    document.addEventListener('touchstart', function() {
-        if (!spotifyActivated) {
-            setTimeout(() => activateSpotify(), 100);
-        }
-    });
+
 });
 
 // Inicializar integração com Spotify
@@ -693,84 +678,7 @@ document.addEventListener('touchend', function(event) {
     this.lastTouchEnd = now;
 }, false);
 
-// Tentar iniciar Spotify automaticamente
-function attemptSpotifyAutoplay() {
-    setTimeout(() => {
-        // Tentar múltiplas abordagens para autoplay
-        const spotifyIframe = document.getElementById('spotify-iframe');
-        if (spotifyIframe) {
-            try {
-                // Focar no iframe
-                spotifyIframe.focus();
-                
-                // Tentar disparar eventos de clique
-                const clickEvent = new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                    view: window
-                });
-                spotifyIframe.dispatchEvent(clickEvent);
-                
-                console.log('Tentativa de autoplay do Spotify executada');
-            } catch (e) {
-                console.log('Autoplay automático bloqueado, aguardando interação do usuário');
-            }
-        }
-        
-        // Se não funcionar, mostrar dica após alguns segundos
-        setTimeout(() => {
-            const hint = document.getElementById('music-hint');
-            if (hint && !spotifyActivated) {
-                hint.style.display = 'block';
-            }
-        }, 3000);
-    }, 1000);
-}
 
-// Variável para controlar se o Spotify foi ativado
-let spotifyActivated = false;
-
-// Função para ativar o Spotify quando o usuário clicar
-function activateSpotify() {
-    const spotifyIframe = document.getElementById('spotify-iframe');
-    const hint = document.getElementById('music-hint');
-    
-    if (spotifyIframe && !spotifyActivated) {
-        try {
-            // Recarregar o iframe com autoplay
-            const currentSrc = spotifyIframe.src;
-            spotifyIframe.src = currentSrc + '&t=' + Date.now(); // Cache bust
-            
-            // Focar no iframe
-            setTimeout(() => {
-                spotifyIframe.focus();
-                
-                // Simular clique no iframe
-                const clickEvent = new MouseEvent('click', {
-                    bubbles: true,
-                    cancelable: true,
-                    view: window
-                });
-                spotifyIframe.dispatchEvent(clickEvent);
-                
-                spotifyActivated = true;
-                
-                // Esconder a dica
-                if (hint) {
-                    hint.classList.add('hidden');
-                    setTimeout(() => {
-                        hint.style.display = 'none';
-                    }, 500);
-                }
-                
-                console.log('Spotify ativado com sucesso!');
-            }, 100);
-            
-        } catch (e) {
-            console.log('Erro ao ativar Spotify:', e);
-        }
-    }
-}
 
 // Configurar player visual
 function setupVisualPlayer() {

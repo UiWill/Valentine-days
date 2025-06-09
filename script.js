@@ -8,6 +8,10 @@ const currentTimeEl = document.getElementById('currentTime');
 const durationEl = document.getElementById('duration');
 const soundWaves = document.querySelector('.sound-waves');
 
+// YouTube Player
+let youtubePlayer = null;
+let youtubePlayerReady = false;
+
 // Estado do player
 let isPlaying = false;
 let isDragging = false;
@@ -25,7 +29,82 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Configurar interações
     setupInteractions();
+    
+    // Inicializar YouTube Player
+    initYouTubePlayer();
 });
+
+// Função chamada quando a API do YouTube está pronta
+function onYouTubeIframeAPIReady() {
+    youtubePlayer = new YT.Player('youtube-player', {
+        height: '0',
+        width: '0',
+        videoId: 'a7fzkqLozwA', // I Like Me Better - Lauv
+        playerVars: {
+            'autoplay': 0,
+            'controls': 0,
+            'loop': 1,
+            'playlist': 'a7fzkqLozwA'
+        },
+        events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange
+        }
+    });
+}
+
+function onPlayerReady(event) {
+    youtubePlayerReady = true;
+    console.log('YouTube player pronto!');
+    // Definir duração da música
+    durationEl.textContent = "3:38";
+    useSimulation = false; // Usar YouTube em vez de simulação
+}
+
+function onPlayerStateChange(event) {
+    if (event.data == YT.PlayerState.PLAYING && youtubePlayerReady) {
+        isPlaying = true;
+        updatePlayPauseButton();
+        updateSoundWaves();
+        startProgressTracking();
+    } else if (event.data == YT.PlayerState.PAUSED) {
+        isPlaying = false;
+        updatePlayPauseButton();
+        updateSoundWaves();
+        stopProgressTracking();
+    }
+}
+
+// Controle de progresso do YouTube
+let progressInterval = null;
+
+function startProgressTracking() {
+    if (progressInterval) clearInterval(progressInterval);
+    
+    progressInterval = setInterval(() => {
+        if (youtubePlayer && youtubePlayerReady && isPlaying) {
+            const currentTime = youtubePlayer.getCurrentTime();
+            const duration = youtubePlayer.getDuration();
+            
+            if (duration > 0) {
+                updateTimeDisplay(currentTime, duration);
+                updateProgressBar(currentTime / duration);
+            }
+        }
+    }, 1000);
+}
+
+function stopProgressTracking() {
+    if (progressInterval) {
+        clearInterval(progressInterval);
+        progressInterval = null;
+    }
+}
+
+function initYouTubePlayer() {
+    // A API será carregada automaticamente
+    console.log('Inicializando YouTube Player...');
+}
 
 // Configurar player de música
 function setupMusicPlayer() {
@@ -69,35 +148,29 @@ function setupSimulatedPlayer() {
 
 // Alternar entre play e pause
 function togglePlayPause() {
-    if (isPlaying) {
-        if (useSimulation) {
-            // Parar simulação
+    if (youtubePlayerReady && youtubePlayer) {
+        // Usar YouTube Player
+        if (isPlaying) {
+            youtubePlayer.pauseVideo();
+        } else {
+            youtubePlayer.playVideo();
+        }
+    } else {
+        // Fallback para simulação
+        if (isPlaying) {
             if (simulationInterval) {
                 clearInterval(simulationInterval);
                 simulationInterval = null;
             }
+            isPlaying = false;
         } else {
-            audioPlayer.pause();
-        }
-        isPlaying = false;
-    } else {
-        if (useSimulation) {
-            // Iniciar simulação
             startSimulatedPlayback();
-        } else {
-            // Tentar reproduzir áudio real
-            audioPlayer.play().catch(e => {
-                console.log('Erro ao reproduzir:', e);
-                // Fallback para simulação
-                useSimulation = true;
-                startSimulatedPlayback();
-            });
+            isPlaying = true;
         }
-        isPlaying = true;
+        
+        updatePlayPauseButton();
+        updateSoundWaves();
     }
-    
-    updatePlayPauseButton();
-    updateSoundWaves();
 }
 
 // Simular reprodução de áudio com progresso realista
@@ -186,14 +259,17 @@ function seekAudio(e) {
     const rect = progressBar.getBoundingClientRect();
     const percent = (e.clientX - rect.left) / rect.width;
     
-    if (useSimulation) {
-        // Para simulação, apenas atualizar visualmente
+    if (youtubePlayerReady && youtubePlayer) {
+        // YouTube Player
+        const duration = youtubePlayer.getDuration();
+        const newTime = percent * duration;
+        youtubePlayer.seekTo(newTime, true);
+    } else {
+        // Simulação
         const duration = 218; // 3:38 em segundos
         const newTime = percent * duration;
         updateTimeDisplay(newTime, duration);
         updateProgressBar(percent);
-    } else if (audioPlayer.duration) {
-        audioPlayer.currentTime = percent * audioPlayer.duration;
     }
 }
 

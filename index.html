@@ -41,7 +41,7 @@
             <div class="music-player">
                 <div class="player-header">
                     <h3>🎵 Nossa Música Especial</h3>
-                    <p class="player-note">🎧 Player Romântico - Clique ▶️ para começar</p>
+                    <p class="player-note">🎧 Música Real do YouTube - Clique ▶️ para ouvir</p>
                 </div>
                 
                 <div class="player-content">
@@ -55,11 +55,17 @@
                         </div>
                     </div>
 
-                    <!-- Audio Element -->
-                    <audio id="audioPlayer" preload="auto" loop>
-                        <source src="https://www.soundjay.com/misc/sounds/bell-ringing-05.wav" type="audio/wav">
-                        <source src="https://file-examples.com/storage/fe68c0b7317aaaa42bbdeb3/2017/11/file_example_MP3_700KB.mp3" type="audio/mpeg">
-                        Seu navegador não suporta áudio HTML5.
+                    <!-- YouTube Audio Integration -->
+                    <div class="youtube-player" id="youtube-container">
+                        <iframe id="youtube-player" width="0" height="0" 
+                                src="https://www.youtube.com/embed/a7fzkqLozwA?enablejsapi=1&controls=0&autoplay=0&loop=1&playlist=a7fzkqLozwA" 
+                                frameborder="0" allow="autoplay; encrypted-media" style="display: none;">
+                        </iframe>
+                    </div>
+                    
+                    <!-- Fallback Audio Element -->
+                    <audio id="audioPlayer" preload="auto" loop style="display: none;">
+                        <source src="" type="audio/mpeg">
                     </audio>
 
                     <!-- Custom Controls -->
@@ -120,6 +126,8 @@
         </div>
     </div>
 
+    <!-- YouTube API -->
+    <script src="https://www.youtube.com/iframe_api"></script>
     <script src="script.js"></script>
 </body>
 </html> 

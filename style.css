@@ -132,9 +132,17 @@ body {
 .player-header h3 {
     text-align: center;
     color: #2d3436;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     font-family: 'Dancing Script', cursive;
     font-size: 1.4em;
+}
+
+.player-note {
+    text-align: center;
+    color: #666;
+    font-size: 0.9em;
+    margin-bottom: 15px;
+    font-style: italic;
 }
 
 .song-info {

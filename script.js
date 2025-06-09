@@ -41,25 +41,58 @@ function setupMusicPlayer() {
         updateSoundWaves();
     });
     
+    // Eventos de erro
+    audioPlayer.addEventListener('error', () => {
+        console.log('Erro no áudio, usando simulação');
+        // Se não conseguir carregar áudio real, usar simulação
+        setupSimulatedPlayer();
+    });
+    
     // Clique na barra de progresso
     document.querySelector('.progress-bar').addEventListener('click', seekAudio);
     
-    // Tentar reproduzir automaticamente (alguns navegadores bloqueiam)
-    setTimeout(tryAutoplay, 2000);
+    // Configurar simulação como fallback
+    setupSimulatedPlayer();
+}
+
+// Variáveis para simulação
+let simulationInterval = null;
+let useSimulation = true;
+
+// Configurar player simulado
+function setupSimulatedPlayer() {
+    useSimulation = true;
+    // Definir duração fixa para "I Like Me Better"
+    durationEl.textContent = "3:38";
+    currentTimeEl.textContent = "0:00";
 }
 
 // Alternar entre play e pause
 function togglePlayPause() {
     if (isPlaying) {
-        audioPlayer.pause();
+        if (useSimulation) {
+            // Parar simulação
+            if (simulationInterval) {
+                clearInterval(simulationInterval);
+                simulationInterval = null;
+            }
+        } else {
+            audioPlayer.pause();
+        }
         isPlaying = false;
     } else {
-        // Reproduzir música de exemplo (ou usar URL da música real)
-        audioPlayer.play().catch(e => {
-            console.log('Erro ao reproduzir:', e);
-            // Fallback para áudio de exemplo
-            playExampleAudio();
-        });
+        if (useSimulation) {
+            // Iniciar simulação
+            startSimulatedPlayback();
+        } else {
+            // Tentar reproduzir áudio real
+            audioPlayer.play().catch(e => {
+                console.log('Erro ao reproduzir:', e);
+                // Fallback para simulação
+                useSimulation = true;
+                startSimulatedPlayback();
+            });
+        }
         isPlaying = true;
     }
     
@@ -67,23 +100,20 @@ function togglePlayPause() {
     updateSoundWaves();
 }
 
-// Reproduzir áudio de exemplo se a música original não funcionar
-function playExampleAudio() {
-    // Criar contexto de áudio para simular reprodução
-    if (typeof(Audio) !== "undefined") {
-        // Simular reprodução com timer
-        simulateAudioPlayback();
-    }
-}
-
-// Simular reprodução de áudio
-function simulateAudioPlayback() {
+// Simular reprodução de áudio com progresso realista
+function startSimulatedPlayback() {
     let currentTime = 0;
     const duration = 218; // 3:38 em segundos
     
-    const interval = setInterval(() => {
+    // Limpar intervalo anterior se existir
+    if (simulationInterval) {
+        clearInterval(simulationInterval);
+    }
+    
+    simulationInterval = setInterval(() => {
         if (!isPlaying) {
-            clearInterval(interval);
+            clearInterval(simulationInterval);
+            simulationInterval = null;
             return;
         }
         
@@ -91,11 +121,9 @@ function simulateAudioPlayback() {
         updateTimeDisplay(currentTime, duration);
         updateProgressBar(currentTime / duration);
         
+        // Reiniciar quando chegar ao fim (loop)
         if (currentTime >= duration) {
-            clearInterval(interval);
-            isPlaying = false;
-            updatePlayPauseButton();
-            updateSoundWaves();
+            currentTime = 0;
         }
     }, 1000);
 }
@@ -158,7 +186,13 @@ function seekAudio(e) {
     const rect = progressBar.getBoundingClientRect();
     const percent = (e.clientX - rect.left) / rect.width;
     
-    if (audioPlayer.duration) {
+    if (useSimulation) {
+        // Para simulação, apenas atualizar visualmente
+        const duration = 218; // 3:38 em segundos
+        const newTime = percent * duration;
+        updateTimeDisplay(newTime, duration);
+        updateProgressBar(percent);
+    } else if (audioPlayer.duration) {
         audioPlayer.currentTime = percent * audioPlayer.duration;
     }
 }
@@ -172,17 +206,17 @@ function formatTime(seconds) {
     return mins + ':' + (secs < 10 ? '0' : '') + secs;
 }
 
-// Tentar reprodução automática
-function tryAutoplay() {
-    // Nota: Muitos navegadores bloqueiam autoplay
-    // Esta função é chamada após interação do usuário
+// Tentar reproduzir áudio real (fallback para simulação)
+function tryRealAudio() {
     audioPlayer.play().then(() => {
+        useSimulation = false;
         isPlaying = true;
         updatePlayPauseButton();
         updateSoundWaves();
     }).catch(() => {
-        // Autoplay bloqueado - normal
-        console.log('Autoplay bloqueado pelo navegador');
+        // Usar simulação se áudio real falhar
+        useSimulation = true;
+        console.log('Usando player simulado');
     });
 }
 

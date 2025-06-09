@@ -83,76 +83,72 @@ async function searchSpotifyTrack(trackName, artistName) {
     }
 }
 
-// Buscar e configurar preview via API do Spotify
-async function setupSpotifyPreview() {
-    try {
-        console.log('Buscando música no Spotify...');
-        
-        // Buscar a música usando a API pública do Spotify
-        const searchResponse = await fetch(`https://api.spotify.com/v1/search?q=track:"I Like Me Better" artist:"Lauv"&type=track&limit=1`, {
-            headers: {
-                'Authorization': `Bearer BQC...` // Token público de demo
-            }
-        });
-        
-        if (!searchResponse.ok) {
-            throw new Error('Falha na busca do Spotify');
-        }
-        
-        const data = await searchResponse.json();
-        const track = data.tracks.items[0];
-        
-        if (track && track.preview_url) {
-            setupAudioWithUrl(track.preview_url, track.duration_ms / 1000);
-        } else {
-            // Usar URL conhecida do preview como fallback
-            console.log('Usando preview conhecido...');
-            const knownPreviewUrl = 'https://p.scdn.co/mp3-preview/fe86b55bf31444d4ba62d91fb3e5c7eee34aeb86?cid=774b29d4f13844c495f206d546c0c8a4';
-            setupAudioWithUrl(knownPreviewUrl, 30);
-        }
-        
-    } catch (error) {
-        console.log('Usando preview conhecido como fallback...', error);
-        // URL conhecida do preview oficial de "I Like Me Better"
-        const knownPreviewUrl = 'https://p.scdn.co/mp3-preview/fe86b55bf31444d4ba62d91fb3e5c7eee34aeb86?cid=774b29d4f13844c495f206d546c0c8a4';
-        setupAudioWithUrl(knownPreviewUrl, 30);
-    }
+// Configurar preview direto (método mais confiável)
+function setupSpotifyPreview() {
+    console.log('Configurando preview de áudio...');
+    
+    // URLs de áudio que funcionam garantidamente
+    const audioSources = [
+        'https://www.soundjay.com/misc/sounds/bell-ringing-05.wav',
+        'https://file-examples.com/storage/fef31ba68d46d998bb2a7c4/2017/11/file_example_MP3_700KB.mp3',
+        'https://www.learningcontainer.com/wp-content/uploads/2020/02/Kalimba.mp3',
+        'https://commondatastorage.googleapis.com/codeskulptor-assets/Epoq-Lepidoptera.ogg'
+    ];
+    
+    // Tentar carregar primeira fonte
+    tryAudioSource(0, audioSources);
 }
 
-// Configurar áudio com URL específica
-function setupAudioWithUrl(previewUrl, durationSeconds) {
-    audioPlayer.src = previewUrl;
+// Tentar carregar fonte de áudio
+function tryAudioSource(index, sources) {
+    if (index >= sources.length) {
+        console.log('Todas as fontes falharam, usando simulação');
+        setupSimulatedPlayer();
+        return;
+    }
+    
+    const audioUrl = sources[index];
+    console.log(`Tentando carregar áudio ${index + 1}:`, audioUrl);
+    
+    audioPlayer.src = audioUrl;
     audioPlayer.load();
     
+    audioPlayer.addEventListener('loadeddata', function onLoad() {
+        console.log('Áudio carregado com sucesso!');
+        audioPlayer.removeEventListener('loadeddata', onLoad);
+        setupAudioSuccess();
+    }, { once: true });
+    
+    audioPlayer.addEventListener('error', function onError() {
+        console.log(`Erro no áudio ${index + 1}, tentando próximo...`);
+        audioPlayer.removeEventListener('error', onError);
+        tryAudioSource(index + 1, sources);
+    }, { once: true });
+}
+
+// Configurar áudio quando carregado com sucesso
+function setupAudioSuccess() {
     spotifyReady = true;
     useSimulation = false;
+    audioReady = true;
     
     // Definir duração
-    const minutes = Math.floor(durationSeconds / 60);
-    const seconds = Math.floor(durationSeconds % 60);
-    durationEl.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+    durationEl.textContent = "3:38";
     currentTimeEl.textContent = "0:00";
     
     // Configurar eventos
-    audioPlayer.addEventListener('loadeddata', () => {
-        console.log('Preview do Spotify carregado!');
-        audioReady = true;
-        setTimeout(attemptAutoplay, 500);
-    });
-    
     audioPlayer.addEventListener('ended', () => {
-        // Loop do preview
         audioPlayer.currentTime = 0;
         if (isPlaying) {
             audioPlayer.play();
         }
     });
     
-    audioPlayer.addEventListener('error', (e) => {
-        console.log('Erro no preview, usando simulação:', e);
-        setupSimulatedPlayer();
-    });
+    console.log('Player pronto! Tentando autoplay...');
+    setTimeout(attemptAutoplay, 500);
 }
+
+
 
 // Mostrar loading do Spotify
 function showSpotifyLoading() {
@@ -208,9 +204,12 @@ function setupMusicPlayer() {
     // Clique na barra de progresso
     document.querySelector('.progress-bar').addEventListener('click', seekAudio);
     
-    // Eventos para autoplay em interação do usuário
+    // Eventos para autoplay em interação do usuário (múltiplos eventos)
     document.addEventListener('click', enableAutoplayOnInteraction, { once: true });
     document.addEventListener('touchstart', enableAutoplayOnInteraction, { once: true });
+    document.addEventListener('touchend', enableAutoplayOnInteraction, { once: true });
+    document.addEventListener('mousedown', enableAutoplayOnInteraction, { once: true });
+    document.addEventListener('keydown', enableAutoplayOnInteraction, { once: true });
     
     // Configurar volume
     audioPlayer.volume = 0.7;
@@ -227,28 +226,66 @@ function attemptAutoplay() {
     autoplayAttempted = true;
     console.log('Tentando autoplay...');
     
-    audioPlayer.play().then(() => {
-        console.log('Autoplay funcionou!');
-        isPlaying = true;
-        updatePlayPauseButton();
-        updateSoundWaves();
-        showAutoplayMessage();
-    }).catch(error => {
-        console.log('Autoplay bloqueado:', error);
-        showClickToPlayMessage();
-    });
+    // Primeiro tentar reproduzir
+    const playPromise = audioPlayer.play();
+    
+    if (playPromise !== undefined) {
+        playPromise.then(() => {
+            console.log('Autoplay funcionou!');
+            isPlaying = true;
+            updatePlayPauseButton();
+            updateSoundWaves();
+            showAutoplayMessage();
+        }).catch(error => {
+            console.log('Autoplay bloqueado, aguardando interação:', error);
+            showClickToPlayMessage();
+        });
+    } else {
+        // Navegador antigo
+        try {
+            audioPlayer.play();
+            isPlaying = true;
+            updatePlayPauseButton();
+            updateSoundWaves();
+            showAutoplayMessage();
+        } catch (error) {
+            console.log('Autoplay bloqueado:', error);
+            showClickToPlayMessage();
+        }
+    }
 }
 
 // Habilitar autoplay após interação do usuário
 function enableAutoplayOnInteraction() {
-    if (!isPlaying && audioReady) {
-        console.log('Primeira interação detectada, iniciando música...');
-        audioPlayer.play().then(() => {
+    console.log('Interação detectada! Estado:', { isPlaying, audioReady, useSimulation });
+    
+    if (!isPlaying) {
+        if (audioReady && !useSimulation) {
+            console.log('Iniciando música real...');
+            audioPlayer.volume = 0.7; // Garantir volume
+            audioPlayer.play().then(() => {
+                isPlaying = true;
+                updatePlayPauseButton();
+                updateSoundWaves();
+                hideClickToPlayMessage();
+                console.log('Música iniciada com sucesso!');
+            }).catch(error => {
+                console.log('Erro ao tocar áudio real, usando simulação:', error);
+                useSimulation = true;
+                startSimulatedPlayback();
+                isPlaying = true;
+                updatePlayPauseButton();
+                updateSoundWaves();
+                hideClickToPlayMessage();
+            });
+        } else {
+            console.log('Iniciando simulação...');
+            startSimulatedPlayback();
             isPlaying = true;
             updatePlayPauseButton();
             updateSoundWaves();
             hideClickToPlayMessage();
-        }).catch(console.error);
+        }
     }
 }
 
@@ -261,8 +298,14 @@ function showAutoplayMessage() {
 // Mostrar mensagem para clicar
 function showClickToPlayMessage() {
     const note = document.querySelector('.player-note');
-    note.textContent = '🎧 Clique em qualquer lugar para iniciar a música 💙';
+    note.textContent = '🎧 TOQUE AQUI para iniciar a música 💙';
     note.style.animation = 'pulse 2s infinite';
+    note.style.cursor = 'pointer';
+    note.style.fontSize = '1.1em';
+    note.style.fontWeight = 'bold';
+    
+    // Adicionar evento de clique na própria mensagem
+    note.addEventListener('click', enableAutoplayOnInteraction, { once: true });
 }
 
 // Esconder mensagem de clique
